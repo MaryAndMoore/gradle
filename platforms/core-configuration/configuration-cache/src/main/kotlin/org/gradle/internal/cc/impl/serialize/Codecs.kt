@@ -93,7 +93,6 @@ import org.gradle.internal.serialize.codecs.core.RegularFileCodec
 import org.gradle.internal.serialize.codecs.core.RegularFilePropertyCodec
 import org.gradle.internal.serialize.codecs.core.SerializedLambdaParametersCheckingCodec
 import org.gradle.internal.serialize.codecs.core.SetPropertyCodec
-import org.gradle.internal.serialize.graph.StringPrefixedTree
 import org.gradle.internal.serialize.codecs.core.StringValueSnapshotCodec
 import org.gradle.internal.serialize.codecs.core.TaskInAnotherBuildCodec
 import org.gradle.internal.serialize.codecs.core.TaskNodeCodec
@@ -131,6 +130,7 @@ import org.gradle.internal.serialize.codecs.dm.transform.TransformedExternalArti
 import org.gradle.internal.serialize.codecs.dm.transform.TransformedProjectArtifactSetCodec
 import org.gradle.internal.serialize.codecs.stdlib.ProxyCodec
 import org.gradle.internal.serialize.graph.Codec
+import org.gradle.internal.serialize.graph.StringPrefixedTree
 import org.gradle.internal.serialize.graph.codecs.BeanCodec
 import org.gradle.internal.serialize.graph.codecs.BeanSpecCodec
 import org.gradle.internal.serialize.graph.codecs.Bindings
@@ -178,7 +178,6 @@ class Codecs(
     val parallelStore: Boolean = true,
     val parallelLoad: Boolean = true,
     problems: InternalProblems,
-    prefixedTree: StringPrefixedTree
 ) {
     private
     val userTypesBindings: Bindings
@@ -201,7 +200,7 @@ class Codecs(
             bind(DefaultContextAwareTaskLoggerCodec)
             bind(LoggerCodec)
 
-            fileCollectionTypes(directoryFileTreeFactory, fileCollectionFactory, artifactSetConverter, fileOperations, fileFactory, patternSetFactory, fileLookup, prefixedTree)
+            fileCollectionTypes(directoryFileTreeFactory, fileCollectionFactory, artifactSetConverter, fileOperations, fileFactory, patternSetFactory, fileLookup)
 
             bind(org.gradle.internal.serialize.codecs.core.ApiTextResourceAdapterCodec)
 
@@ -379,12 +378,11 @@ class Codecs(
         fileOperations: FileOperations,
         fileFactory: FileFactory,
         patternSetFactory: Factory<PatternSet>,
-        prefixedTree: StringPrefixedTree,
         fileLookup: FileLookup
     ) {
         bind(PathToFileResolverCodec(fileLookup))
-        bind(DirectoryCodec(fileFactory, prefixedTree))
-        bind(RegularFileCodec(fileFactory, prefixedTree))
+        bind(DirectoryCodec(fileFactory))
+        bind(RegularFileCodec(fileFactory))
         bind(ConfigurableFileTreeCodec(fileCollectionFactory))
         bind(FileTreeCodec(fileCollectionFactory, directoryFileTreeFactory, fileOperations))
         val fileCollectionCodec = FileCollectionCodec(fileCollectionFactory, artifactSetConverter)
