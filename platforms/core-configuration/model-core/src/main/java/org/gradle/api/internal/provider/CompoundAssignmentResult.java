@@ -17,8 +17,6 @@
 package org.gradle.api.internal.provider;
 
 import com.google.common.base.Preconditions;
-import org.gradle.api.internal.provider.support.SupportsCompoundAssignment;
-import org.gradle.api.provider.Provider;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -27,7 +25,7 @@ import java.util.Objects;
  * A helper class to implement an intermediate result of a compound assignment operation, like "+=".
  * It is then assigned to the left-hand side operand. When the LHS is a Property-typed property of some Gradle-enhanced object, then the assignment action is invoked.
  */
-public final class CompoundAssignmentResult<T> extends AbstractMinimalProvider<T> implements SupportsCompoundAssignment.Result<Provider<T>> {
+final class CompoundAssignmentResult<T> extends AbstractMinimalProvider<T> implements org.gradle.api.internal.groovy.support.CompoundAssignmentResult {
     private final ProviderInternal<T> value;
     private final Object owner;
     @Nullable
@@ -47,7 +45,7 @@ public final class CompoundAssignmentResult<T> extends AbstractMinimalProvider<T
     }
 
     public boolean isOwnedBy(Object target) {
-        // It might be that this object was unwrapped, in which case it is considered a normal provider.
+        // It might be that this object escaped its origin expression, in which case it is considered a normal provider.
         return assignToOwnerAction != null && target == owner;
     }
 
@@ -90,11 +88,15 @@ public final class CompoundAssignmentResult<T> extends AbstractMinimalProvider<T
     }
 
     @Override
-    @Nullable
-    public Provider<T> unwrap() {
+    public void assignmentComplete() {
         // When the expression involves a variable on the left side as opposed to a field, then this provider becomes its value.
         // It must lose all "magical" properties towards its owner, because it may be used to set its value outside the original expression.
         assignToOwnerAction = null;
-        return null;
+    }
+
+    @Override
+    public boolean shouldDiscardResult() {
+        // We don't support using foo += bar as a subexpression for properties.
+        return true;
     }
 }
