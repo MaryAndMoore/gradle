@@ -20,8 +20,8 @@ import org.gradle.internal.serialize.graph.CloseableReadContext
 import org.gradle.internal.serialize.graph.CloseableWriteContext
 import org.gradle.internal.serialize.graph.FilePrefixedTree
 import org.gradle.internal.serialize.graph.FilePrefixedTree.Node
-import org.gradle.internal.serialize.graph.FileSystemTreeDecoder
-import org.gradle.internal.serialize.graph.FileSystemTreeEncoder
+import org.gradle.internal.serialize.graph.FileDecoder
+import org.gradle.internal.serialize.graph.FileEncoder
 import org.gradle.internal.serialize.graph.ReadContext
 import org.gradle.internal.serialize.graph.WriteContext
 import java.io.File
@@ -34,18 +34,13 @@ import kotlin.concurrent.thread
 private const val EOF = -1
 
 
-class DefaultFileSystemTreeEncoder(
+class DefaultFileEncoder(
     private val globalContext: CloseableWriteContext,
     private val prefixedTree: FilePrefixedTree
-) : FileSystemTreeEncoder {
+) : FileEncoder {
 
     override fun writeFile(writeContext: WriteContext, file: File) {
-        val index = prefixedTree.insert(file)
-        writeContext.writeSmallInt(index)
-    }
-
-    override suspend fun writeTree() {
-        // no-op
+        writeContext.writeSmallInt(prefixedTree.insert(file))
     }
 
     override fun close() {
@@ -66,9 +61,9 @@ class DefaultFileSystemTreeEncoder(
     }
 }
 
-class DefaultFileSystemTreeDecoder(
+class DefaultFileDecoder(
     private val globalContext: CloseableReadContext,
-) : FileSystemTreeDecoder {
+) : FileDecoder {
 
     private
     class FutureFile {
@@ -129,10 +124,6 @@ class DefaultFileSystemTreeDecoder(
             is File -> file
             else -> error("$file is unsupported")
         }
-
-    override suspend fun readTree() {
-        // no-op
-    }
 
     override fun close() {
         reader.join(TimeUnit.MINUTES.toMillis(1))

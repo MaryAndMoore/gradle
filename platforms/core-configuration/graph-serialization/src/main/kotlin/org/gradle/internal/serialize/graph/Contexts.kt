@@ -46,14 +46,14 @@ interface BeanStateReaderLookup {
 data class SpecialEncoders(
     val stringEncoder: StringEncoder = InlineStringEncoder,
     val sharedObjectEncoder: SharedObjectEncoder = InlineSharedObjectEncoder,
-    val fileSystemTreeEncoder: FileSystemTreeEncoder = InlineFileSystemTreeEncoder
+    val fileEncoder: FileEncoder = InlineFileEncoder
 )
 
 
 data class SpecialDecoders(
     val stringDecoder: StringDecoder = InlineStringDecoder,
     val sharedObjectDecoder: SharedObjectDecoder = InlineSharedObjectDecoder,
-    val fileSystemTreeDecoder: FileSystemTreeDecoder = InlineFileSystemTreeDecoder
+    val fileDecoder: FileDecoder = InlineFileDecoder
 )
 
 
@@ -85,7 +85,7 @@ class DefaultWriteContext(
 
     val sharedObjectEncoder = specialEncoders.sharedObjectEncoder
 
-    val fileSystemTreeEncoder = specialEncoders.fileSystemTreeEncoder
+    val fileSystemTreeEncoder = specialEncoders.fileEncoder
 
     override val sharedIdentities = WriteIdentities()
 
@@ -126,10 +126,6 @@ class DefaultWriteContext(
         sharedObjectEncoder.run {
             write(this@DefaultWriteContext, value, encode)
         }
-    }
-
-    override suspend fun writeFileSystemTree() {
-        fileSystemTreeEncoder.writeTree()
     }
 
     override fun writeClass(type: Class<*>) {
@@ -209,17 +205,13 @@ object InlineStringDecoder : StringDecoder {
 }
 
 
-interface FileSystemTreeEncoder : AutoCloseable {
-    // TODO suspend?
+interface FileEncoder : AutoCloseable {
     fun writeFile(writeContext: WriteContext, file: File)
-    suspend fun writeTree()
 }
 
 
-interface FileSystemTreeDecoder : AutoCloseable {
-    // TODO suspend?
+interface FileDecoder : AutoCloseable {
     fun readFile(readContext: ReadContext): File
-    suspend fun readTree()
 }
 
 
@@ -251,22 +243,18 @@ object InlineSharedObjectEncoder : SharedObjectEncoder {
 }
 
 
-object InlineFileSystemTreeEncoder : FileSystemTreeEncoder {
+object InlineFileEncoder : FileEncoder {
     override fun writeFile(writeContext: WriteContext, file: File) {
         BaseSerializerFactory.FILE_SERIALIZER.write(writeContext, file)
     }
-
-    override suspend fun writeTree() = Unit
 
     override fun close() = Unit
 }
 
 
-object InlineFileSystemTreeDecoder : FileSystemTreeDecoder {
+object InlineFileDecoder : FileDecoder {
     override fun readFile(readContext: ReadContext): File =
         BaseSerializerFactory.FILE_SERIALIZER.read(readContext)
-
-    override suspend fun readTree() = Unit
 
     override fun close() = Unit
 }
@@ -298,7 +286,7 @@ class DefaultReadContext(
 
     val sharedObjectDecoder = specialDecoders.sharedObjectDecoder
 
-    val fileSystemTreeDecoder = specialDecoders.fileSystemTreeDecoder
+    val fileSystemTreeDecoder = specialDecoders.fileDecoder
 
     private
     var singletonProperty: Any? = null
@@ -335,10 +323,6 @@ class DefaultReadContext(
 
     override fun readFile(): File =
         fileSystemTreeDecoder.readFile(this)
-
-    override suspend fun readFileSystemTree() {
-        fileSystemTreeDecoder.readTree()
-    }
 
     override suspend fun <T : Any> readSharedObject(decode: suspend ReadContext.() -> T): T =
         sharedObjectDecoder.run {
