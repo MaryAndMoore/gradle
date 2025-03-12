@@ -85,7 +85,7 @@ class DefaultWriteContext(
 
     val sharedObjectEncoder = specialEncoders.sharedObjectEncoder
 
-    val fileSystemTreeEncoder = specialEncoders.fileEncoder
+    val fileEncoder = specialEncoders.fileEncoder
 
     override val sharedIdentities = WriteIdentities()
 
@@ -117,7 +117,7 @@ class DefaultWriteContext(
     }
 
     override fun writeFile(file: File) {
-        fileSystemTreeEncoder.run {
+        fileEncoder.run {
             writeFile(this@DefaultWriteContext, file)
         }
     }
@@ -286,7 +286,7 @@ class DefaultReadContext(
 
     val sharedObjectDecoder = specialDecoders.sharedObjectDecoder
 
-    val fileSystemTreeDecoder = specialDecoders.fileDecoder
+    val fileDecoder = specialDecoders.fileDecoder
 
     private
     var singletonProperty: Any? = null
@@ -322,7 +322,7 @@ class DefaultReadContext(
     }
 
     override fun readFile(): File =
-        fileSystemTreeDecoder.readFile(this)
+        fileDecoder.readFile(this)
 
     override suspend fun <T : Any> readSharedObject(decode: suspend ReadContext.() -> T): T =
         sharedObjectDecoder.run {

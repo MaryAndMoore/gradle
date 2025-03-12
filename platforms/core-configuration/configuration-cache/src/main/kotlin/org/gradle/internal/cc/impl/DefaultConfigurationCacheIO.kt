@@ -259,10 +259,10 @@ class DefaultConfigurationCacheIO internal constructor(
         stateFile: ConfigurationCacheStateFile,
         action: suspend MutableReadContext.(ConfigurationCacheState) -> T
     ): T =
-        withFileSystemTreeDecoderFor(stateFile) { fileSystemTreeDecoder ->
+        withFileDecoderFor(stateFile) { fileDecoder ->
             withStringDecoderFor(stateFile) { stringDecoder ->
                 withSharedObjectDecoderFor(stateFile, stringDecoder) { sharedObjectDecoder ->
-                    readConfigurationCacheStateWithSpecialDecoders(SpecialDecoders(stringDecoder, sharedObjectDecoder, fileSystemTreeDecoder), stateFile, action)
+                    readConfigurationCacheStateWithSpecialDecoders(SpecialDecoders(stringDecoder, sharedObjectDecoder, fileDecoder), stateFile, action)
                 }
             }
         }
@@ -272,18 +272,18 @@ class DefaultConfigurationCacheIO internal constructor(
         stateFile: ConfigurationCacheStateFile,
         action: suspend WriteContext.(ConfigurationCacheState) -> T
     ): T =
-        withFileSystemTreeEncoderFor(stateFile) { fileSystemTreeEncoder ->
+        withFileEncoderFor(stateFile) { fileEncoder ->
             withStringEncoderFor(stateFile) { stringEncoder ->
                 withSharedObjectEncoderFor(stateFile, stringEncoder) { sharedObjectEncoder ->
-                    writeConfigurationCacheStateWithSpecialEncoders(SpecialEncoders(stringEncoder, sharedObjectEncoder, fileSystemTreeEncoder), stateFile, action)
+                    writeConfigurationCacheStateWithSpecialEncoders(SpecialEncoders(stringEncoder, sharedObjectEncoder, fileEncoder), stateFile, action)
                 }
             }
         }
 
     private
-    fun fileSystemTreeEncoderFor(fileSystemTreeFile: ConfigurationCacheStateFile): FileEncoder =
-        if (true) {
-            val (globalContext, _) = writeContextFor(fileSystemTreeFile, SpecialEncoders()) { "files" }
+    fun fileEncoderFor(filesFile: ConfigurationCacheStateFile): FileEncoder =
+        if (isUsingFilesOptimizationStrategy(filesFile)) {
+            val (globalContext, _) = writeContextFor(filesFile, SpecialEncoders()) { "files" }
             globalContext.push(IsolateOwners.OwnerGradle(host.currentBuild.gradle))
             DefaultFileEncoder(globalContext, prefixedTree)
         } else {
@@ -292,9 +292,9 @@ class DefaultConfigurationCacheIO internal constructor(
 
 
     private
-    fun fileSystemTreeDecoderFor(fileSystemTreeFile: ConfigurationCacheStateFile): FileDecoder =
-        if (true) {
-            val (globalContext, _) = readContextFor(fileSystemTreeFile)
+    fun fileDecoderFor(filesFile: ConfigurationCacheStateFile): FileDecoder =
+        if (isUsingFilesOptimizationStrategy(filesFile)) {
+            val (globalContext, _) = readContextFor(filesFile)
             globalContext.push(IsolateOwners.OwnerGradle(host.currentBuild.gradle))
             DefaultFileDecoder(globalContext)
         } else {
@@ -341,15 +341,15 @@ class DefaultConfigurationCacheIO internal constructor(
             }
         }
 
-    private fun <T> withFileSystemTreeDecoderFor(stateFile: ConfigurationCacheStateFile, action: (FileDecoder) -> T): T =
+    private fun <T> withFileDecoderFor(stateFile: ConfigurationCacheStateFile, action: (FileDecoder) -> T): T =
         fileSystemTreeFileFor(stateFile).let { fileSystemTreeFile ->
-            fileSystemTreeDecoderFor(fileSystemTreeFile).use(action)
+            fileDecoderFor(fileSystemTreeFile).use(action)
         }
 
     private
-    fun <T> withFileSystemTreeEncoderFor(stateFile: ConfigurationCacheStateFile, action: (FileEncoder) -> T): T =
+    fun <T> withFileEncoderFor(stateFile: ConfigurationCacheStateFile, action: (FileEncoder) -> T): T =
         fileSystemTreeFileFor(stateFile).let { fileSystemTreeFile ->
-            fileSystemTreeEncoderFor(fileSystemTreeFile).use(action)
+            fileEncoderFor(fileSystemTreeFile).use(action)
         }
 
     private
@@ -502,6 +502,10 @@ class DefaultConfigurationCacheIO internal constructor(
     private
     fun isUsingObjectSharingStrategy(stateFile: ConfigurationCacheStateFile) =
         stateFile.stateType == StateType.Work && startParameter.isSharingObjects
+
+    private
+    fun isUsingFilesOptimizationStrategy(stateFile: ConfigurationCacheStateFile) =
+        stateFile.stateType == StateType.Work && startParameter.isOptimizingFiles
 
     private
     fun loggingTracerFor(profile: () -> String, encoder: PositionAwareEncoder) =
@@ -662,14 +666,14 @@ class DefaultConfigurationCacheIO internal constructor(
     val WriteContext.currentFileEncoder: FileEncoder
         get() {
             require(this is DefaultWriteContext)
-            return this.fileSystemTreeEncoder
+            return this.fileEncoder
         }
 
     private
     val ReadContext.currentFileDecoder: FileDecoder
         get() {
             require(this is DefaultReadContext)
-            return this.fileSystemTreeDecoder
+            return this.fileDecoder
         }
 
     private
