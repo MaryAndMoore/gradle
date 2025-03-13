@@ -245,7 +245,7 @@ object InlineSharedObjectEncoder : SharedObjectEncoder {
 
 object InlineFileEncoder : FileEncoder {
     override fun writeFile(writeContext: WriteContext, file: File) {
-        BaseSerializerFactory.FILE_SERIALIZER.write(writeContext, file)
+        writeContext.writeString(file.path)
     }
 
     override fun close() = Unit
@@ -254,7 +254,7 @@ object InlineFileEncoder : FileEncoder {
 
 object InlineFileDecoder : FileDecoder {
     override fun readFile(readContext: ReadContext): File =
-        BaseSerializerFactory.FILE_SERIALIZER.read(readContext)
+        File(readContext.readString())
 
     override fun close() = Unit
 }
