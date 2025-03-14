@@ -47,7 +47,6 @@ import org.jetbrains.kotlin.config.AnalysisFlags
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.config.JVMConfigurationKeys.IR
 import org.jetbrains.kotlin.config.JVMConfigurationKeys.JDK_HOME
 import org.jetbrains.kotlin.config.JVMConfigurationKeys.JVM_TARGET
 import org.jetbrains.kotlin.config.JVMConfigurationKeys.OUTPUT_DIRECTORY
@@ -58,7 +57,7 @@ import org.jetbrains.kotlin.config.JvmClosureGenerationScheme
 import org.jetbrains.kotlin.config.JvmDefaultMode
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.JvmTarget.JVM_1_8
-import org.jetbrains.kotlin.config.JvmTarget.JVM_23
+import org.jetbrains.kotlin.config.JvmTarget.JVM_22
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
@@ -449,7 +448,7 @@ fun compilerConfigurationFor(messageCollector: MessageCollector, compilerOptions
         put(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY, messageCollector)
         put(JVM_TARGET, compilerOptions.jvmTarget.toKotlinJvmTarget())
         put(JDK_HOME, File(System.getProperty("java.home")))
-        put(IR, true)
+        // put(IR, true) // TODO: is it ok to just remove this?
         put(SAM_CONVERSIONS, JvmClosureGenerationScheme.CLASS)
         addJvmSdkRoots(PathUtil.getJdkClassesRootsFromCurrentJre())
         put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, gradleKotlinDslLanguageVersionSettingsFor(compilerOptions))
@@ -460,10 +459,10 @@ fun compilerConfigurationFor(messageCollector: MessageCollector, compilerOptions
 @VisibleForTesting
 internal
 fun JavaVersion.toKotlinJvmTarget(): JvmTarget {
-    // JvmTarget.fromString(JavaVersion.majorVersion) works from Java 9 to Java 23
+    // JvmTarget.fromString(JavaVersion.majorVersion) works from Java 9 to Java 21
     return JvmTarget.fromString(majorVersion)
         ?: if (this <= JavaVersion.VERSION_1_8) JVM_1_8
-        else JVM_23
+        else JVM_22
 }
 
 
