@@ -25,9 +25,10 @@ abstract class ExternalModulesExtension(isBundleGroovy4: Boolean) {
 
     val configurationCacheReportVersion = "1.24"
     val gradleIdeStarterVersion = "0.5"
-    val kotlinVersion = "2.1.20-RC2"
+    val kotlinVersion = "2.0.21"
 
     fun futureKotlin(module: String) = "org.jetbrains.kotlin:kotlin-$module:$kotlinVersion"
+    fun devKotlin(module: String) = "org.jetbrains.kotlin:kotlin-$module:2.2.0-dev-9537"
 
     val agp = "com.android.tools.build:gradle"
     val ansiControlSequenceUtil = "net.rubygrapefruit:ansi-control-sequence-util"
@@ -120,10 +121,10 @@ abstract class ExternalModulesExtension(isBundleGroovy4: Boolean) {
     val junitPlatform = "org.junit.platform:junit-platform-launcher"
     val junitPlatformEngine = "org.junit.platform:junit-platform-engine"
     val jzlib = "com.jcraft:jzlib"
-    val kotlinCompilerEmbeddable = futureKotlin("compiler-embeddable")
+    val kotlinCompilerEmbeddable = devKotlin("compiler-embeddable")
     val kotlinReflect = futureKotlin("reflect")
-    val kotlinStdlib = futureKotlin("stdlib")
-    val kotlinBuildToolsImpl = futureKotlin("build-tools-impl")
+    val kotlinStdlib = devKotlin("stdlib")
+    val kotlinBuildToolsImpl = devKotlin("build-tools-impl")
     val kotlinJvmAbiGenEmbeddable = "org.jetbrains.kotlin:jvm-abi-gen-embeddable"
     val kotlinxSerializationCore = "org.jetbrains.kotlinx:kotlinx-serialization-core"
     val kotlinxSerializationJson = "org.jetbrains.kotlinx:kotlinx-serialization-json"

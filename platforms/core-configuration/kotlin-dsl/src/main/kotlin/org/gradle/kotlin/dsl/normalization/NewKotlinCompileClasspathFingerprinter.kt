@@ -40,6 +40,10 @@ import org.jetbrains.kotlin.buildtools.api.jvm.AccessibleClassSnapshot
 import org.jetbrains.kotlin.buildtools.api.jvm.ClassSnapshot
 import org.jetbrains.kotlin.buildtools.api.jvm.ClassSnapshotGranularity
 import java.io.File
+import java.net.URL
+import java.net.URLClassLoader
+
+
 
 
 internal
@@ -78,7 +82,7 @@ class NewKotlinCompileClasspathFingerprinter(
 
     private
     fun computeHashForFile(file: File): HashCode {
-        val snapshots = compilationService.calculateClasspathSnapshot(file, ClassSnapshotGranularity.CLASS_LEVEL).classSnapshots
+        val snapshots = compilationService.calculateClasspathSnapshot(file, ClassSnapshotGranularity.CLASS_LEVEL, true).classSnapshots
         return hash(snapshots)
     }
 

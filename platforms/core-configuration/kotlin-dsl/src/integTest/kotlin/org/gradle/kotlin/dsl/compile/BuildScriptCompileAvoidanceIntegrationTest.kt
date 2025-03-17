@@ -260,7 +260,6 @@ class BuildScriptCompileAvoidanceIntegrationTest : AbstractCompileAvoidanceInteg
     }
 
     @Test
-    @Ignore("https://youtrack.jetbrains.com/issue/KT-62555/Wrong-ABI-fingerprint-for-inline-function-containing-a-lambda?s=Wrong-ABI-fingerprint-for-inline-function-containing-a-lambda")
     fun `recompiles buildscript on inline lambda function change in buildSrc class`() {
         val className = givenKotlinClassInBuildSrcContains(
             """

@@ -69,21 +69,21 @@ dependencies {
     }
 
     implementation(libs.kotlinCompilerEmbeddable)
-    api(libs.futureKotlin("script-runtime"))
+    api(libs.devKotlin("script-runtime"))
 
-    api(libs.futureKotlin("scripting-common")) {
+    api(libs.devKotlin("scripting-common")) {
         isTransitive = false
     }
-    implementation(libs.futureKotlin("scripting-jvm")) {
+    implementation(libs.devKotlin("scripting-jvm")) {
         isTransitive = false
     }
-    implementation(libs.futureKotlin("scripting-jvm-host")) {
+    implementation(libs.devKotlin("scripting-jvm-host")) {
         isTransitive = false
     }
-    implementation(libs.futureKotlin("scripting-compiler-embeddable")) {
+    implementation(libs.devKotlin("scripting-compiler-embeddable")) {
         isTransitive = false
     }
-    api(libs.futureKotlin("scripting-compiler-impl-embeddable")) {
+    api(libs.devKotlin("scripting-compiler-impl-embeddable")) {
         isTransitive = false
     }
     implementation(libs.futureKotlin("sam-with-receiver-compiler-plugin")) {

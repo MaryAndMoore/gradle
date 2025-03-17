@@ -474,7 +474,7 @@ fun gradleKotlinDslLanguageVersionSettingsFor(compilerOptions: KotlinCompilerOpt
         AnalysisFlags.skipMetadataVersionCheck to compilerOptions.skipMetadataVersionCheck,
         AnalysisFlags.skipPrereleaseCheck to true,
         AnalysisFlags.allowUnstableDependencies to true,
-        JvmAnalysisFlags.jvmDefaultMode to JvmDefaultMode.ALL,
+        JvmAnalysisFlags.jvmDefaultMode to JvmDefaultMode.NO_COMPATIBILITY,
         JvmAnalysisFlags.javaTypeEnhancementState to JavaTypeEnhancementState(
             jsr305 = Jsr305Settings(globalLevel = ReportLevel.STRICT, migrationLevel = ReportLevel.STRICT),
             getReportLevelForAnnotation = { ReportLevel.STRICT }
