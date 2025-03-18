@@ -85,6 +85,10 @@ val reportResources = tasks.register<Copy>("reportResources") {
 }
 
 sourceSets.main {
+    /**
+     * TODO: Remove this for Gradle 9.0
+     */
+    fun DirectoryProperty.parentFile() = get().asFile.parentFile
     output.dir(reportResources.map { it.destinationDir.parentFile.parentFile.parentFile })
 }
 
