@@ -373,8 +373,8 @@ public abstract class JavaGradlePluginPlugin implements Plugin<Project> {
                     }
                 }
                 for (PluginDeclaration declaration : plugins.get()) {
-                    if (!pluginFileNames.contains(declaration.getId() + ".properties")) {
-                        LOGGER.warn(String.format(DECLARED_PLUGIN_MISSING_MESSAGE, task.getPath(), declaration.getName(), declaration.getId()));
+                    if (!pluginFileNames.contains(declaration.getId().get() + ".properties")) {
+                        LOGGER.warn(String.format(DECLARED_PLUGIN_MISSING_MESSAGE, task.getPath(), declaration.getName(), declaration.getId().get()));
                     }
                 }
             }
