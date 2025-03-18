@@ -32,9 +32,9 @@ import java.util.concurrent.TimeoutException
 import kotlin.concurrent.thread
 
 private const val EOF = (-1).toByte()
-private const val BRACKET_OPEN_FINAL = 1.toByte()
-private const val BRACKET_OPEN_INTERMEDIATE = 2.toByte()
-private const val BRACKET_CLOSE = 3.toByte()
+private const val NODE_FINAL_START = 1.toByte()
+private const val NODE_INTERMEDIATE_START = 2.toByte()
+private const val NODE_END = 3.toByte()
 
 class DefaultFileEncoder(
     private val globalContext: CloseableWriteContext,
@@ -53,17 +53,17 @@ class DefaultFileEncoder(
     }
 
     private fun WriteContext.writePrefixedTreeNode(node: Node, parent: Node?) {
-        val bracket =
-            if (node.isFinal) BRACKET_OPEN_FINAL
-            else BRACKET_OPEN_INTERMEDIATE
+        val nodeHeader =
+            if (node.isFinal) NODE_FINAL_START
+            else NODE_INTERMEDIATE_START
 
-        writeByte(bracket)
+        writeByte(nodeHeader)
         writeSmallInt(node.index - (parent?.index ?: 0)) // delta encoding
         writeString(node.segment)
         node.children.values.forEach { child ->
             writePrefixedTreeNode(child, node)
         }
-        writeByte(BRACKET_CLOSE)
+        writeByte(NODE_END)
     }
 }
 
@@ -105,7 +105,7 @@ class DefaultFileDecoder(
                 val bracket = context.readByte()
                 if (bracket == EOF) break
 
-                if (bracket == BRACKET_CLOSE) {
+                if (bracket == NODE_END) {
                     stack.removeLastOrNull() ?: break
                     continue
                 }
@@ -113,7 +113,7 @@ class DefaultFileDecoder(
                 val deltaId = context.readSmallInt()
                 val segment = context.readString()
                 val parent = stack.lastOrNull()
-                val isFinal = bracket == BRACKET_OPEN_FINAL
+                val isFinal = bracket == NODE_FINAL_START
                 val id = deltaId + (parent ?: 0)
 
                 val path = parent?.let { segments[it] + "/" + segment } ?: "/$segment"
