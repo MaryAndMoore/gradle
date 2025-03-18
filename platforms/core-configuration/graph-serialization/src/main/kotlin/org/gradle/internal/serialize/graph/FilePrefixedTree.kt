@@ -57,9 +57,7 @@ class FilePrefixedTree {
             current = current.children.computeIfAbsent(segment) { Node(false, currentIndex.getAndIncrement(), segment) }
         }
 
-//        if (current.isIntermediate) {
         current.isFinal = true
-//        }
 
         return current.index
     }

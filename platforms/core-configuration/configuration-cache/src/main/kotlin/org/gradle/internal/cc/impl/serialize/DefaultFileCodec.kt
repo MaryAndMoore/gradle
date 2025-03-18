@@ -55,8 +55,8 @@ class DefaultFileEncoder(
         writeBoolean(node.isFinal)
         writeString(node.segment)
         writeNullableSmallInt(parent?.index)
-        node.children.entries.forEach { child ->
-            writePrefixedTreeNode(child.value, node)
+        node.children.values.forEach { child ->
+            writePrefixedTreeNode(child, node)
         }
     }
 }
