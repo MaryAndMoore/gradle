@@ -31,8 +31,10 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import kotlin.concurrent.thread
 
-private const val EOF = -1
-
+private const val EOF = (-1).toByte()
+private const val BRACKET_OPEN_FINAL = 1.toByte()
+private const val BRACKET_OPEN_INTERMEDIATE = 2.toByte()
+private const val BRACKET_CLOSE = 3.toByte()
 
 class DefaultFileEncoder(
     private val globalContext: CloseableWriteContext,
@@ -46,18 +48,22 @@ class DefaultFileEncoder(
     override fun close() {
         globalContext.use {
             it.writePrefixedTreeNode(prefixedTree.compress(), null)
-            it.writeSmallInt(EOF)
+            it.writeByte(EOF)
         }
     }
 
     private fun WriteContext.writePrefixedTreeNode(node: Node, parent: Node?) {
-        writeSmallInt(node.index)
-        writeBoolean(node.isFinal)
+        val bracket =
+            if (node.isFinal) BRACKET_OPEN_FINAL
+            else BRACKET_OPEN_INTERMEDIATE
+
+        writeByte(bracket)
+        writeSmallInt(node.index - (parent?.index ?: 0)) // delta encoding
         writeString(node.segment)
-        writeNullableSmallInt(parent?.index)
         node.children.values.forEach { child ->
             writePrefixedTreeNode(child, node)
         }
+        writeByte(BRACKET_CLOSE)
     }
 }
 
@@ -92,14 +98,23 @@ class DefaultFileDecoder(
     private
     val reader = thread(isDaemon = true) {
         val segments = HashMap<Int, String>()
+        val stack = ArrayDeque<Int>()
+
         globalContext.use { context ->
             while (true) {
-                val id = context.readSmallInt()
-                if (id == EOF) break
+                val bracket = context.readByte()
+                if (bracket == EOF) break
 
-                val isFinal = context.readBoolean()
+                if (bracket == BRACKET_CLOSE) {
+                    stack.removeLastOrNull() ?: break
+                    continue
+                }
+
+                val deltaId = context.readSmallInt()
                 val segment = context.readString()
-                val parent = context.readNullableSmallInt()
+                val parent = stack.lastOrNull()
+                val isFinal = bracket == BRACKET_OPEN_FINAL
+                val id = deltaId + (parent ?: 0)
 
                 val path = parent?.let { segments[it] + "/" + segment } ?: "/$segment"
                 segments[id] = path
@@ -114,6 +129,8 @@ class DefaultFileDecoder(
                         file
                     }
                 }
+
+                stack.addLast(id)
             }
         }
     }
