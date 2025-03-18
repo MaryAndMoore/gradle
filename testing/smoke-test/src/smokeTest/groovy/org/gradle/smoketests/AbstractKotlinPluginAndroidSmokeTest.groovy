@@ -22,7 +22,6 @@ import org.gradle.testdistribution.LocalOnly
 import org.gradle.util.internal.VersionNumber
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.junit.Assume.assumeTrue
 
 /**
  * Abstract base class for testing the Kotlin plugin with Android projects.
@@ -40,8 +39,6 @@ abstract class AbstractKotlinPluginAndroidSmokeTest extends AbstractSmokeTest im
         given:
         AndroidHome.assertIsSet()
         AGP_VERSIONS.assumeAgpSupportsCurrentJavaVersionAndKotlinVersion(androidPluginVersion, kotlinPluginVersion)
-        assumeTrue(VersionNumber.parse(androidPluginVersion).major >= 8)
-        assumeTrue(androidPluginVersion != "8.10.0-dev")
         this.kotlinPluginVersion = VersionNumber.parse(kotlinPluginVersion)
         useSample(getSampleName())
 
