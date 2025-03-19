@@ -483,7 +483,7 @@ class JavaCompileToolchainIntegrationTest extends AbstractIntegrationSpec implem
                 }
             }
             tasks.withType(JavaCompile).configureEach {
-                options.compilerArgs.add("-Xlint:deprecation")
+                options.compilerArgs << "-Xlint:deprecation"
             }
         """
 

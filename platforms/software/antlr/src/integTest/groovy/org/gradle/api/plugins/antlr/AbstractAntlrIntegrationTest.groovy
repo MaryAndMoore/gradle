@@ -42,7 +42,7 @@ abstract class AbstractAntlrIntegrationTest extends AbstractIntegrationSpec {
             }
 
             tasks.withType(JavaCompile).configureEach {
-                options.compilerArgs.add("-proc:none")
+                options.compilerArgs << "-proc:none"
             }
         """
 
@@ -58,7 +58,7 @@ abstract class AbstractAntlrIntegrationTest extends AbstractIntegrationSpec {
             }
 
             tasks.withType(JavaCompile).configureEach {
-                options.compilerArgs.add("-proc:none")
+                options.compilerArgs << "-proc:none"
             }
         """
     }

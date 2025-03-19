@@ -193,7 +193,7 @@ abstract class AbstractBasicGroovyCompilerIntegrationSpec extends MultiVersionIn
 
         buildFile << """
             compileGroovy {
-                options.compilerArgs.add('-proc:none')
+                options.compilerArgs << '-proc:none'
             }
         """
 
@@ -310,7 +310,7 @@ abstract class AbstractBasicGroovyCompilerIntegrationSpec extends MultiVersionIn
 
         buildFile << """
             compileGroovy {
-                options.compilerArgs.add('-proc:none')
+                options.compilerArgs << '-proc:none'
             }
         """
 

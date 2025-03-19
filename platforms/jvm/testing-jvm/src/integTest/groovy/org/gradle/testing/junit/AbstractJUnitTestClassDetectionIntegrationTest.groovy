@@ -76,7 +76,7 @@ abstract class AbstractJUnitTestClassDetectionIntegrationTest extends AbstractTe
             }
             tasks.withType(JavaCompile) {
                 options.with {
-                    compilerArgs.add('-parameters')
+                    compilerArgs << '-parameters'
                 }
             }
             test.${configureTestFramework}
