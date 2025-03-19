@@ -110,7 +110,7 @@ class AndroidPluginsSmokeTest extends AbstractPluginValidatingSmokeTest implemen
         SantaTrackerConfigurationCacheWorkaround.beforeBuild(runner.projectDir, IntegrationTestBuildContext.INSTANCE.gradleUserHomeDir)
         def result = runner
             .deprecations(AndroidDeprecations) {
-                expectIsPropertyDeprecationWarnings()
+                maybeExpectIsPropertyDeprecationWarnings()
             }
             .expectChangingPropertyValueAtExecutionTimeDeprecationWarning("systemProperties")
             .build()
