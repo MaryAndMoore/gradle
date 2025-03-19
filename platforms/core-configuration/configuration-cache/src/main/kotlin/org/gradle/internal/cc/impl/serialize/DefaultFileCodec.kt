@@ -95,6 +95,7 @@ class DefaultFileDecoder(
 
     private val files = ConcurrentHashMap<Int, Any>()
 
+    @Suppress("LoopWithTooManyJumpStatements")
     private
     val reader = thread(isDaemon = true) {
         val segments = HashMap<Int, String>()
@@ -102,10 +103,10 @@ class DefaultFileDecoder(
 
         globalContext.use { context ->
             while (true) {
-                val bracket = context.readByte()
-                if (bracket == EOF) break
+                val nodeHeader = context.readByte()
+                if (nodeHeader == EOF) break
 
-                if (bracket == NODE_END) {
+                if (nodeHeader == NODE_END) {
                     stack.removeLastOrNull() ?: break
                     continue
                 }
@@ -113,7 +114,7 @@ class DefaultFileDecoder(
                 val deltaId = context.readSmallInt()
                 val segment = context.readString()
                 val parent = stack.lastOrNull()
-                val isFinal = bracket == NODE_FINAL_START
+                val isFinal = nodeHeader == NODE_FINAL_START
                 val id = deltaId + (parent ?: 0)
 
                 val path = parent?.let { segments[it] + "/" + segment } ?: "/$segment"

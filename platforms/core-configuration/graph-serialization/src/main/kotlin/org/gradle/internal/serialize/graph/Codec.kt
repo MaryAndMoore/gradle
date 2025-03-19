@@ -60,7 +60,7 @@ interface WriteContext : MutableIsolateContext, Encoder {
 
     suspend fun <T : Any> writeSharedObject(value: T, encode: suspend WriteContext.(T) -> Unit)
 
-    override fun writeFile(file: File) // remove?
+    override fun writeFile(file: File)
 
     fun writeClass(type: Class<*>)
 
