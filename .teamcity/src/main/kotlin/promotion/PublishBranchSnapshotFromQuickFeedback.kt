@@ -26,7 +26,6 @@ object PublishBranchSnapshotFromQuickFeedback : PublishGradleDistributionFullBui
     prepTask = "prepSnapshot",
     promoteTask = "promoteSnapshot",
     extraParameters = "-PpromotedBranch=%branch.qualifier%",
-    vcsRootId = gradlePromotionBranches,
 ) {
     init {
         id("Promotion_PublishBranchSnapshotFromQuickFeedback")

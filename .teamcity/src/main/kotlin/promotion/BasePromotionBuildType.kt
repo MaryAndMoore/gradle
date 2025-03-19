@@ -18,20 +18,22 @@ package promotion
 
 import common.BuildToolBuildJvm
 import common.Os
+import common.VersionedSettingsBranch
 import common.paramsForBuildToolBuild
 import common.requiresNotEc2Agent
 import common.requiresOs
 import jetbrains.buildServer.configs.kotlin.AbsoluteId
 import jetbrains.buildServer.configs.kotlin.BuildType
 import jetbrains.buildServer.configs.kotlin.CheckoutMode
+import vcsroots.GRADLE_PROMOTE_EXPERIMENTAL_VCS_ROOT_ID
+import vcsroots.GRADLE_PROMOTE_MASTER_VCS_ROOT_ID
 
 abstract class BasePromotionBuildType(
-    vcsRootId: String,
     cleanCheckout: Boolean = true,
 ) : BuildType() {
     init {
         vcs {
-            root(AbsoluteId(vcsRootId))
+            root(AbsoluteId(VersionedSettingsBranch.fromDslContext().gradlePromoteVcsRootId()))
 
             checkoutMode = CheckoutMode.ON_AGENT
             this.cleanCheckout = cleanCheckout
