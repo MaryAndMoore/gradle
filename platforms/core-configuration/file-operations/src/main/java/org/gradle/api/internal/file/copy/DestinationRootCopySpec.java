@@ -71,4 +71,11 @@ public class DestinationRootCopySpec extends DelegatingCopySpecInternal {
     public CopySpecInternal getDelegate() {
         return delegate;
     }
+
+    /**
+     * Visible only for cc serialization
+     */
+    public PathToFileResolver getPathToFileResolver() {
+        return fileResolver;
+    }
 }
