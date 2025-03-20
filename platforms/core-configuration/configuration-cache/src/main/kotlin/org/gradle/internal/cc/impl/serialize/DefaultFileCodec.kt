@@ -16,6 +16,7 @@
 
 package org.gradle.internal.cc.impl.serialize
 
+import org.gradle.internal.file.FilePathUtil
 import org.gradle.internal.serialize.graph.CloseableReadContext
 import org.gradle.internal.serialize.graph.CloseableWriteContext
 import org.gradle.internal.serialize.graph.FilePrefixedTree
@@ -117,7 +118,11 @@ class DefaultFileDecoder(
                 val isFinal = nodeHeader == NODE_FINAL_START
                 val id = deltaId + (parent ?: 0)
 
-                val path = parent?.let { segments[it] + "/" + segment } ?: "/$segment"
+                val path = parent?.let {
+                    val parentSegment = segments[it]
+                    if (parentSegment.isNullOrEmpty()) segment else "$parentSegment${FilePathUtil.FILE_PATH_SEPARATORS}$segment"
+                } ?: segment
+
                 segments[id] = path
 
                 if (isFinal) {

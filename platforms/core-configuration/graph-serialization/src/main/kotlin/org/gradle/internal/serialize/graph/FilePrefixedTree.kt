@@ -45,16 +45,16 @@ class FilePrefixedTree {
      * If the path already exists, returns the existing index.
      * */
     fun insert(file: File): Int {
-        val segments = FilePathUtil.getPathSegments(file.path)
+        val segments = file.path.split(FilePathUtil.FILE_PATH_SEPARATORS)
         var current = root
 
         for (segment in segments) {
-            if (segment.isEmpty()) {
+            val childSegment = segment.ifEmpty {
                 // leading separator
-                continue
+                FilePathUtil.FILE_PATH_SEPARATORS
             }
 
-            current = current.children.computeIfAbsent(segment) { Node(false, currentIndex.getAndIncrement(), segment) }
+            current = current.children.computeIfAbsent(childSegment) { Node(false, currentIndex.getAndIncrement(), childSegment) }
         }
 
         current.isFinal = true
@@ -99,22 +99,30 @@ class FilePrefixedTree {
         }
 
         return when (current.children.size) {
-            0 -> Node(true, current.index, segmentsToCompress.compress())
+            0 -> Node(true, current.index, segmentsToCompress.compressPath())
             1 -> when (current.singleChild.children.size) {
                 // final child
                 0 -> {
                     segmentsToCompress.add(current.singleChild.segment)
-                    Node(true, current.singleChild.index, segmentsToCompress.compress())
+                    Node(true, current.singleChild.index, segmentsToCompress.compressPath())
                 }
 
-                else -> Node(current.isFinal, current.index, segmentsToCompress.compress(), current.children.compress())
+                else -> Node(current.isFinal, current.index, segmentsToCompress.compressPath(), current.children.compress())
             }
 
-            else -> Node(current.isFinal, current.index, segmentsToCompress.compress(), current.children.compress())
+            else -> Node(current.isFinal, current.index, segmentsToCompress.compressPath(), current.children.compress())
         }
     }
 
-    private fun List<String>.compress() = filter { it.isNotEmpty() }.joinToString("/")
+    private fun List<String>.compressPath(): String {
+        val segments = dropWhile { it.isEmpty() }
+        val isAbsolute = segments.firstOrNull() == FilePathUtil.FILE_PATH_SEPARATORS
+        return if (isAbsolute) {
+            FilePathUtil.FILE_PATH_SEPARATORS + segments.drop(0).joinToString(FilePathUtil.FILE_PATH_SEPARATORS)
+        } else {
+            segments.joinToString(FilePathUtil.FILE_PATH_SEPARATORS)
+        }
+    }
 
     private fun Map<String, Node>.compress() = ConcurrentHashMap(values.map(::compressFrom).associateBy { it.segment })
 
