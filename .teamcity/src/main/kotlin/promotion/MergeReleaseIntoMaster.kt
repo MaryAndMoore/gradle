@@ -54,7 +54,7 @@ object MergeReleaseIntoMaster : BasePromotionBuildType() {
             ) {
                 artifacts {
                     buildRule = lastSuccessful()
-                    artifactRules = "version-info.properties => promote-projects/gradle/build/"
+                    artifactRules = "version-info.properties => ./"
                 }
             }
         }
