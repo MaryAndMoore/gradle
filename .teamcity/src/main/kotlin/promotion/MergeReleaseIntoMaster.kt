@@ -32,7 +32,6 @@ object MergeReleaseIntoMaster : BasePromotionBuildType() {
                 name = "Merge Release into Master"
                 tasks =
                     listOf(
-                        "clean",
                         "updateReleaseVersionsOnMaster",
                         "gitMergeReleaseToMaster",
                         "createPreTestCommitPullRequestMergeReleaseIntoMaster",
