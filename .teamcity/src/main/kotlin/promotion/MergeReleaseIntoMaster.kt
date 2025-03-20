@@ -35,6 +35,7 @@ object MergeReleaseIntoMaster : BasePromotionBuildType() {
                         "updateReleaseVersionsOnMaster",
                         "gitMergeReleaseToMaster",
                         "createPreTestCommitPullRequestMergeReleaseIntoMaster",
+                        "-PtriggeredBy=%teamcity.build.triggeredBy%",
                     ).joinToString(" ")
                 useGradleWrapper = true
             }
