@@ -25,8 +25,6 @@ import common.requiresOs
 import jetbrains.buildServer.configs.kotlin.AbsoluteId
 import jetbrains.buildServer.configs.kotlin.BuildType
 import jetbrains.buildServer.configs.kotlin.CheckoutMode
-import vcsroots.GRADLE_PROMOTE_EXPERIMENTAL_VCS_ROOT_ID
-import vcsroots.GRADLE_PROMOTE_MASTER_VCS_ROOT_ID
 
 abstract class BasePromotionBuildType(
     cleanCheckout: Boolean = true,

@@ -30,12 +30,13 @@ object MergeReleaseIntoMaster : BasePromotionBuildType() {
         steps {
             gradleWrapper {
                 name = "Merge Release into Master"
-                tasks = listOf(
-                    "clean",
-                    "updateReleaseVersionsOnMaster",
-                    "gitMergeReleaseToMaster",
-                    "createPreTestCommitPullRequestMergeReleaseIntoMaster",
-                ).joinToString(" ")
+                tasks =
+                    listOf(
+                        "clean",
+                        "updateReleaseVersionsOnMaster",
+                        "gitMergeReleaseToMaster",
+                        "createPreTestCommitPullRequestMergeReleaseIntoMaster",
+                    ).joinToString(" ")
                 useGradleWrapper = true
             }
         }
@@ -49,7 +50,9 @@ object MergeReleaseIntoMaster : BasePromotionBuildType() {
         }
 
         dependencies {
-            dependency(AbsoluteId("Gradle_${VersionedSettingsBranch.fromDslContext().branchName.uppercase()}_${NIGHTLY_SNAPSHOT_BUILD_ID}")) {
+            dependency(
+                AbsoluteId("Gradle_${VersionedSettingsBranch.fromDslContext().branchName.uppercase()}_${NIGHTLY_SNAPSHOT_BUILD_ID}"),
+            ) {
                 artifacts {
                     buildRule = lastSuccessful()
                     artifactRules = "version-info.properties => promote-projects/gradle/build/"

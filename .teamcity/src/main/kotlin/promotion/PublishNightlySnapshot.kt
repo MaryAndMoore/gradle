@@ -25,11 +25,11 @@ const val NIGHTLY_SNAPSHOT_BUILD_ID = "Promotion_Nightly"
 class PublishNightlySnapshot(
     branch: VersionedSettingsBranch,
 ) : PublishGradleDistributionFullBuild(
-    promotedBranch = branch.branchName,
-    prepTask = branch.prepNightlyTaskName(),
-    promoteTask = branch.promoteNightlyTaskName(),
-    triggerName = "ReadyforNightly",
-) {
+        promotedBranch = branch.branchName,
+        prepTask = branch.prepNightlyTaskName(),
+        promoteTask = branch.promoteNightlyTaskName(),
+        triggerName = "ReadyforNightly",
+    ) {
     init {
         id(NIGHTLY_SNAPSHOT_BUILD_ID)
         name = "Nightly Snapshot"
@@ -58,13 +58,13 @@ class PublishNightlySnapshot(
                     // We want it to be triggered only when there're pending changes in the specific vcs root, i.e. GradleMaster/GradleRelease
                     triggerRules = "+:root=${VersionedSettingsBranch.fromDslContext().vcsRootId()}:."
                     branchFilter =
-                        if (VersionedSettingsBranch.fromDslContext().isExperimental)
+                        if (VersionedSettingsBranch.fromDslContext().isExperimental) {
                             // The promotion itself will be triggered on gradle-promote's master branch
                             "+:master"
-                        else
+                        } else {
                             // The promotion itself will be triggered on gradle-promote's experimental branch
                             "+:experimental"
-
+                        }
                 }
             }
         }
