@@ -242,8 +242,6 @@ public class DiagnosticToProblemListener implements DiagnosticListener<JavaFileO
             DiagnosticFormatter<JCDiagnostic> formatter = Log.instance(context).getDiagnosticFormatter();
             return formatter.format((JCDiagnostic) diagnostic, JavacMessages.instance(context).getCurrentLocale());
         } catch (Exception ex) {
-            // If for some reason the formatter fails, we can still regress back to the default message
-            // One drawback of this is that the `RichDiagnosticFormatter` we get most of the case can simplify
             LOGGER.info(FORMATTER_FALLBACK_MESSAGE);
             return diagnostic.getMessage(Locale.getDefault());
         }
