@@ -270,11 +270,8 @@ class DefaultProjectSpec extends Specification {
         serviceRegistry.add(SoftwareFeatureApplicator, Stub(SoftwareFeatureApplicator))
 
         def antBuilder = Mock(AntBuilder)
-        serviceRegistry.addProvider(new ServiceRegistrationProvider() {
-            @Provides
-            Factory<AntBuilder> createAntBuilder() {
-                return () -> antBuilder
-            }
+        serviceRegistry.add(AntBuilderFactory, Mock(AntBuilderFactory) {
+            createAntBuilder() >> antBuilder
         })
 
         serviceRegistry.addProvider(new ServiceRegistrationProvider() {
