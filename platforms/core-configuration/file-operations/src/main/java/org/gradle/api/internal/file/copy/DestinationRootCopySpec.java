@@ -20,6 +20,7 @@ import org.gradle.api.file.CopySpec;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.FileSystemLocation;
 import org.gradle.api.internal.file.FilePropertyFactory;
+import org.gradle.api.internal.lambdas.SerializableLambdas;
 import org.gradle.api.internal.provider.Providers;
 import org.gradle.api.provider.Provider;
 import org.gradle.internal.file.PathToFileResolver;
@@ -49,13 +50,13 @@ public class DestinationRootCopySpec extends DelegatingCopySpecInternal {
         if (destinationDir instanceof DirectoryProperty) {
             getDestinationDir().set((DirectoryProperty) destinationDir);
         } else if (destinationDir instanceof Provider) {
-            getDestinationDir().fileProvider(((Provider<?>) destinationDir).map(file -> {
+            getDestinationDir().fileProvider(((Provider<?>) destinationDir).map(SerializableLambdas.transformer(file -> {
                 if (file instanceof FileSystemLocation) {
                     return ((FileSystemLocation) file).getAsFile();
                 } else {
                     return fileResolver.resolve(file);
                 }
-            }));
+            })));
         } else {
             getDestinationDir().fileProvider(Providers.changing(() -> fileResolver.resolve(destinationDir)));
         }
