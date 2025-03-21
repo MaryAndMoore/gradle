@@ -41,7 +41,6 @@ import org.gradle.api.internal.tasks.TaskContainerInternal
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.util.internal.PatternSets
 import org.gradle.configuration.internal.ListenerBuildOperationDecorator
-import org.gradle.internal.Factory
 import org.gradle.internal.build.BuildState
 import org.gradle.internal.instantiation.InstantiatorFactory
 import org.gradle.internal.management.DependencyResolutionManagementInternal
