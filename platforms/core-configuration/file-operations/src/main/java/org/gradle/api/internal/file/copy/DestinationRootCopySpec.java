@@ -47,6 +47,7 @@ public class DestinationRootCopySpec extends DelegatingCopySpecInternal {
 
     @Override
     public CopySpec into(Object destinationDir) {
+        PathToFileResolver fileResolver = this.fileResolver;
         if (destinationDir instanceof DirectoryProperty) {
             getDestinationDir().set((DirectoryProperty) destinationDir);
         } else if (destinationDir instanceof Provider) {
