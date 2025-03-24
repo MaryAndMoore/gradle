@@ -18,6 +18,7 @@ package org.gradle.integtests.internal.component.resolution.failure
 
 import org.gradle.api.internal.catalog.problems.ResolutionFailureProblemId
 import org.gradle.integtests.fixtures.AbstractIntegrationSpec
+import org.gradle.integtests.fixtures.ToBeFixedForConfigurationCache
 import org.gradle.internal.component.resolution.failure.exception.AbstractResolutionFailureException
 import org.gradle.internal.component.resolution.failure.exception.ArtifactSelectionException
 import org.gradle.internal.component.resolution.failure.exception.ConflictingConstraintsException
@@ -52,6 +53,7 @@ import org.gradle.util.GradleVersion
 class ResolutionFailureHandlerIntegrationTest extends AbstractIntegrationSpec {
 
     // region Component Selection failures
+    @ToBeFixedForConfigurationCache(because = "Error preventing graph construction prevents caching of the configuration's files - this is expected")
     def "demonstrate conflicting version constraints failure"() {
         conflictingVersionConstraints.prepare()
 
