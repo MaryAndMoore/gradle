@@ -57,6 +57,7 @@ import org.gradle.internal.serialize.graph.DefaultReadContext
 import org.gradle.internal.serialize.graph.DefaultWriteContext
 import org.gradle.internal.serialize.graph.FileDecoder
 import org.gradle.internal.serialize.graph.FileEncoder
+import org.gradle.internal.serialize.graph.FilePrefixedTree
 import org.gradle.internal.serialize.graph.InlineFileDecoder
 import org.gradle.internal.serialize.graph.InlineFileEncoder
 import org.gradle.internal.serialize.graph.InlineSharedObjectDecoder
@@ -72,7 +73,6 @@ import org.gradle.internal.serialize.graph.SpecialDecoders
 import org.gradle.internal.serialize.graph.SpecialEncoders
 import org.gradle.internal.serialize.graph.StringDecoder
 import org.gradle.internal.serialize.graph.StringEncoder
-import org.gradle.internal.serialize.graph.FilePrefixedTree
 import org.gradle.internal.serialize.graph.Tracer
 import org.gradle.internal.serialize.graph.WriteContext
 import org.gradle.internal.serialize.graph.readCollection
@@ -107,7 +107,6 @@ class DefaultConfigurationCacheIO internal constructor(
     private val classLoaderScopeRegistryListener: ConfigurationCacheClassLoaderScopeRegistryListener,
     private val classLoaderScopeRegistry: ClassLoaderScopeRegistry,
     private val instantiatorFactory: InstantiatorFactory,
-    private val prefixedTree: FilePrefixedTree
 ) : ConfigurationCacheBuildTreeIO, ConfigurationCacheIncludedBuildIO {
 
     private
@@ -118,6 +117,9 @@ class DefaultConfigurationCacheIO internal constructor(
 
     private
     val buildInvocationScopeId by lazy { service<BuildInvocationScopeId>() }
+
+    private
+    val stateFileTree = FilePrefixedTree()
 
     override fun writeCacheEntryDetailsTo(
         buildStateRegistry: BuildStateRegistry,
@@ -285,7 +287,7 @@ class DefaultConfigurationCacheIO internal constructor(
         if (isUsingFilesOptimizationStrategy(filesFile)) {
             val (globalContext, _) = writeContextFor(filesFile, SpecialEncoders()) { "files" }
             globalContext.push(IsolateOwners.OwnerGradle(host.currentBuild.gradle))
-            DefaultFileEncoder(globalContext, prefixedTree)
+            DefaultFileEncoder(globalContext, stateFileTree)
         } else {
             InlineFileEncoder
         }

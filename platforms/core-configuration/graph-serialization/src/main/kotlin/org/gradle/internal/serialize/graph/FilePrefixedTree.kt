@@ -17,8 +17,6 @@
 package org.gradle.internal.serialize.graph
 
 import org.gradle.internal.file.FilePathUtil
-import org.gradle.internal.service.scopes.Scope.BuildTree
-import org.gradle.internal.service.scopes.ServiceScope
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
@@ -29,13 +27,11 @@ import java.util.concurrent.atomic.AtomicInteger
  * <p>
  * The tree can be compressed. The compressing factor is totally depends on the structure of the tree.
  */
-@ServiceScope(BuildTree::class)
 class FilePrefixedTree {
 
     private var currentIndex = AtomicInteger(1)
 
     val root = Node(false, 0, "")
-
 
     /**
      * Inserts a file path into the tree, creating necessary nodes if they do not exist.
@@ -60,18 +56,6 @@ class FilePrefixedTree {
         current.isFinal = true
 
         return current.index
-    }
-
-    /**
-     * The only efficient way to perform a lookup in the tree.
-     * <p>
-     * Indexes are built by performing a depth-first search (DFS) through the entire tree,
-     * creating a mapping between each index and its corresponding item.
-     */
-    fun buildIndexes(root: Node): Map<Int, File> {
-        val indexes = mutableMapOf<Int, File>()
-        buildIndexFor(root, mutableListOf(), indexes)
-        return indexes
     }
 
     /**
@@ -126,14 +110,6 @@ class FilePrefixedTree {
 
     private fun Map<String, Node>.compress() = ConcurrentHashMap(values.map(::compressFrom).associateBy { it.segment })
 
-    private fun buildIndexFor(node: Node, segments: MutableList<String>, indexes: MutableMap<Int, File>) {
-        segments.add(node.segment)
-        indexes[node.index] = File("/${segments.joinToString("/")}")
-        for (child in node.children.values) {
-            buildIndexFor(child, segments, indexes)
-        }
-        segments.removeAt(segments.size - 1) // backtrack
-    }
 
     data class Node(
         @Volatile var isFinal: Boolean,
@@ -147,5 +123,28 @@ class FilePrefixedTree {
         val singleChild
             get() = children.entries.single().value
 
+    }
+
+    companion object {
+        /**
+         * The only efficient way to perform a lookup in the tree.
+         * <p>
+         * Indexes are built by performing a depth-first search (DFS) through the entire tree,
+         * creating a mapping between each index and its corresponding item.
+         */
+        fun buildIndexes(root: Node): Map<Int, File> {
+            val indexes = mutableMapOf<Int, File>()
+            buildIndexFor(root, mutableListOf(), indexes)
+            return indexes
+        }
+
+        private fun buildIndexFor(node: Node, segments: MutableList<String>, indexes: MutableMap<Int, File>) {
+            segments.add(node.segment)
+            indexes[node.index] = File(segments.joinToString(FilePathUtil.FILE_PATH_SEPARATORS))
+            for (child in node.children.values) {
+                buildIndexFor(child, segments, indexes)
+            }
+            segments.removeAt(segments.size - 1) // backtrack
+        }
     }
 }

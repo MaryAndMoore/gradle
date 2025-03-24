@@ -29,7 +29,7 @@ class FilePrefixedTreeTest {
         val fooIndex = prefixedTree.insert(File("org/example/foo/Foo"))
         val barIndex = prefixedTree.insert(File("org/example/bar/Bar"))
 
-        val indexes = prefixedTree.buildIndexes(prefixedTree.root)
+        val indexes = FilePrefixedTree.buildIndexes(prefixedTree.root)
 
         assertEquals(File("/org/example/foo/Foo"), indexes[fooIndex])
         assertEquals(File("/org/example/bar/Bar"), indexes[barIndex])
@@ -127,7 +127,7 @@ class FilePrefixedTreeTest {
         val fooIndex = prefixedTree.insert(File("org/example/foo/Foo"))
         val barIndex = prefixedTree.insert(File("org/example/bar/Bar"))
 
-        val indexes = prefixedTree.buildIndexes(prefixedTree.compress())
+        val indexes = FilePrefixedTree.buildIndexes(prefixedTree.compress())
 
         assertEquals(File("/org/example/foo/Foo"), indexes[fooIndex])
         assertEquals(File("/org/example/bar/Bar"), indexes[barIndex])
