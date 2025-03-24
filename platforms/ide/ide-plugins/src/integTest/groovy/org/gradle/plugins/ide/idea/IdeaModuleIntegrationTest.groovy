@@ -20,6 +20,8 @@ import org.gradle.integtests.fixtures.TestResources
 import org.gradle.integtests.fixtures.ToBeFixedForConfigurationCache
 import org.gradle.integtests.fixtures.executer.ExecutionResult
 import org.gradle.plugins.ide.AbstractIdeIntegrationTest
+import org.gradle.util.GradleVersion
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import spock.lang.Issue
@@ -27,6 +29,12 @@ import spock.lang.Issue
 class IdeaModuleIntegrationTest extends AbstractIdeIntegrationTest {
     @Rule
     public final TestResources testResources = new TestResources(testDirectoryProvider)
+
+    @Before
+    void setup() {
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
+    }
 
     @Test
     @ToBeFixedForConfigurationCache
@@ -45,8 +53,6 @@ class IdeaModuleIntegrationTest extends AbstractIdeIntegrationTest {
         }
 
         //when
-        executer.expectDeprecationWarning('The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 8.0. Please use the testSources property instead.')
-        executer.expectDeprecationWarning('The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 8.0. Please use the testResources property instead.')
         runTask 'idea', '''
 apply plugin: "java"
 apply plugin: "idea"
