@@ -19,6 +19,7 @@ package org.gradle.plugins.ide.fixtures
 import org.gradle.integtests.fixtures.AbstractIntegrationSpec
 import org.gradle.integtests.fixtures.ToBeFixedForConfigurationCache
 import org.gradle.test.fixtures.file.TestFile
+import org.gradle.util.GradleVersion
 import spock.lang.Issue
 
 /**
@@ -42,6 +43,8 @@ abstract class AbstractMultiBuildIdeIntegrationTest extends AbstractIntegrationS
         """
 
         expect:
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds(":buildSrc:${workspaceTask}")
         def workspace = workspace(file("buildSrc"), "buildSrc")
         if (libraryPluginId == "java-library") {
@@ -80,6 +83,8 @@ abstract class AbstractMultiBuildIdeIntegrationTest extends AbstractIntegrationS
 
         when:
         executer.inDirectory(buildA)
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         run(":${workspaceTask}")
 
         then:
@@ -132,6 +137,8 @@ abstract class AbstractMultiBuildIdeIntegrationTest extends AbstractIntegrationS
 
         when:
         executer.inDirectory(buildA)
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         run(":${workspaceTask}")
 
         then:

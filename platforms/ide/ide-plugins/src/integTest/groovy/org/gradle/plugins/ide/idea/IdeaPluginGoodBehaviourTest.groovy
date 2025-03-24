@@ -18,6 +18,10 @@ package org.gradle.plugins.ide.idea
 import org.gradle.integtests.fixtures.WellBehavedPluginTest
 
 class IdeaPluginGoodBehaviourTest extends WellBehavedPluginTest {
+    def setup() {
+        expectTestSourcesAndResourcesDeprecation = true
+    }
+
     @Override
     String getMainTask() {
         return "idea"

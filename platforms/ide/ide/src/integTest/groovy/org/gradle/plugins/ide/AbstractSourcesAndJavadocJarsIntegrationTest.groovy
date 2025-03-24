@@ -25,6 +25,7 @@ import org.gradle.test.precondition.Requires
 import org.gradle.test.preconditions.IntegTestPreconditions
 import org.gradle.test.preconditions.UnitTestPreconditions
 import org.gradle.testing.fixture.GroovyCoverage
+import org.gradle.util.GradleVersion
 import org.junit.Rule
 
 import static org.gradle.util.internal.GroovyDependencyUtil.groovyGroupName
@@ -75,6 +76,8 @@ dependencies {
 
         when:
         useMavenRepo(repo)
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -83,6 +86,8 @@ dependencies {
 
         when:
         server.resetExpectations()
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -97,6 +102,8 @@ dependencies {
 
         when:
         useMavenRepo(repo)
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -124,8 +131,9 @@ dependencies {
         javadocArtifact.expectHead()
         javadocArtifact.expectGetBroken()
 
-
         then:
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
         ideFileContainsNoSourcesAndJavadocEntry()
     }
@@ -157,6 +165,8 @@ dependencies {
 
         when:
         useIvyRepo(repo)
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -164,6 +174,8 @@ dependencies {
 
         when:
         server.resetExpectations()
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -193,7 +205,8 @@ dependencies {
     implementation 'some:module:1.0:api'
     testImplementation 'some:module:1.0:tests'
 }"""
-
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -225,6 +238,8 @@ dependencies {
 
         when:
         useIvyRepo(repo)
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -246,6 +261,8 @@ dependencies {
         module.allowAll()
 
         then:
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
         ideFileContainsNoSourcesAndJavadocEntry()
     }
@@ -269,6 +286,8 @@ dependencies {
         javadocArtifact.expectGetBroken()
 
         then:
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
         ideFileContainsNoSourcesAndJavadocEntry()
     }
@@ -286,6 +305,8 @@ dependencies {
 
         when:
         useIvyRepo(repo)
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -300,6 +321,8 @@ dependencies {
 
         when:
         buildFile << """repositories { flatDir { dir "repo" } }"""
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -374,6 +397,8 @@ dependencies {
             """
 
         when:
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -410,6 +435,8 @@ dependencies {
             """
 
         when:
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -462,6 +489,8 @@ dependencies {
             """
 
         when:
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -485,6 +514,8 @@ dependencies {
 
         when:
         args("--offline")
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:
@@ -512,6 +543,8 @@ dependencies {
         """
 
         when:
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ideTask
 
         then:

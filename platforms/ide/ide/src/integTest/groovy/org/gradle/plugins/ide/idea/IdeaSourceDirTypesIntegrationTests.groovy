@@ -18,6 +18,7 @@ package org.gradle.plugins.ide.idea;
 
 import org.gradle.integtests.fixtures.AbstractIntegrationSpec
 import org.gradle.integtests.fixtures.ToBeFixedForConfigurationCache
+import org.gradle.util.GradleVersion
 
 import static org.gradle.plugins.ide.fixtures.IdeaFixtures.parseIml
 
@@ -47,6 +48,8 @@ class IdeaSourceDirTypesIntegrationTests extends AbstractIntegrationSpec {
         file('src/integTest/java').createDir()
 
         when:
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         succeeds ":idea"
 
         then:

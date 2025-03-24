@@ -27,6 +27,7 @@ import org.gradle.integtests.fixtures.TestResources
 import org.gradle.integtests.fixtures.ToBeFixedForConfigurationCache
 import org.gradle.plugins.ide.AbstractIdeIntegrationTest
 import org.gradle.test.fixtures.file.TestFile
+import org.gradle.util.GradleVersion
 import org.junit.ComparisonFailure
 import org.junit.Rule
 import org.junit.Test
@@ -52,10 +53,14 @@ class IdeaIntegrationTest extends AbstractIdeIntegrationTest implements StableCo
         """
 
         //given
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.withTasks('idea').run()
         def projectContent = getFile([:], 'master.ipr').text
         def moduleContent = getFile([:], 'master.iml').text
 
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.withTasks('idea').run()
         def projectContentAfterMerge = getFile([:], 'master.ipr').text
         def moduleContentAfterMerge = getFile([:], 'master.iml').text
@@ -68,6 +73,8 @@ class IdeaIntegrationTest extends AbstractIdeIntegrationTest implements StableCo
     @Test
     @ToBeFixedForConfigurationCache
     void canCreateAndDeleteMetaData() {
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.withTasks('idea').run()
 
         assertHasExpectedContents('root.ipr')
@@ -82,6 +89,8 @@ class IdeaIntegrationTest extends AbstractIdeIntegrationTest implements StableCo
     @Test
     @ToBeFixedForConfigurationCache
     void worksWithAnEmptyProject() {
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.withTasks('idea').run()
 
         assertHasExpectedContents('root.ipr')
@@ -92,6 +101,8 @@ class IdeaIntegrationTest extends AbstractIdeIntegrationTest implements StableCo
     @ToBeFixedForConfigurationCache
     void worksWithASubProjectThatDoesNotHaveTheIdeaPluginApplied() {
         createDirs("a", "b")
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.withTasks('idea').run()
 
         assertHasExpectedContents('root.ipr')
@@ -101,6 +112,8 @@ class IdeaIntegrationTest extends AbstractIdeIntegrationTest implements StableCo
     @ToBeFixedForConfigurationCache
     void worksWithNonStandardLayout() {
         createDirs("a child project")
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.inDirectory(testDirectory.file('root')).withTasks('idea').run()
 
         assertHasExpectedContents('root/root.ipr')
@@ -111,6 +124,8 @@ class IdeaIntegrationTest extends AbstractIdeIntegrationTest implements StableCo
     @Test
     @ToBeFixedForConfigurationCache
     void overwritesExistingDependencies() {
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.withTasks('idea').run()
 
         assertHasExpectedContents('root.iml')
@@ -119,6 +134,8 @@ class IdeaIntegrationTest extends AbstractIdeIntegrationTest implements StableCo
     @Test
     @ToBeFixedForConfigurationCache
     void addsScalaSdkAndCompilerLibraries() {
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.withTasks('idea').run()
 
         hasProjectLibrary('root.ipr', 'scala-sdk-2.10.0', [], [], [], ['compiler-bridge_2.10', 'scala-library-2.10.0', 'scala-compiler-2.10.0', 'scala-reflect-2.10.0', 'compiler-interface', 'util-interface'])
@@ -145,6 +162,8 @@ class IdeaIntegrationTest extends AbstractIdeIntegrationTest implements StableCo
     @Test
     @ToBeFixedForConfigurationCache
     void addsScalaFacetAndCompilerLibraries() {
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.withTasks('idea').run()
 
         hasProjectLibrary('root.ipr', 'scala-compiler-2.10.0', ['compiler-bridge_2.10', 'scala-compiler-2.10.0', 'scala-library-2.10.0', 'scala-reflect-2.10.0', 'compiler-interface', 'util-interface'], [], [], [])
@@ -361,7 +380,7 @@ idea.module {
     @Test
     @ToBeFixedForConfigurationCache
     void dslSupportsShortFormsForModule() {
-        runTask('idea', """
+        runIdeaTask("""
 apply plugin: 'idea'
 
 idea.module.name = 'X'
@@ -383,7 +402,7 @@ idea.module {
     @Test
     @ToBeFixedForConfigurationCache
     void dslSupportsShortFormsForProject() {
-        runTask('idea', """
+        runIdeaTask("""
 apply plugin: 'idea'
 
 idea.project.wildcards = ['1'] as Set
@@ -431,6 +450,8 @@ apply plugin: "idea"
         file('settings.gradle') << 'rootProject.name = "root"'
 
         //when
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         executer.withTasks('idea').run()
 
         //then
@@ -447,7 +468,8 @@ apply plugin: "idea"
     @Test
     @ToBeFixedForConfigurationCache
     void canAddProjectLibraries() {
-        runTask("idea", """
+
+        runIdeaTask("""
 apply plugin: 'idea'
 
 idea.project {

@@ -51,6 +51,4 @@ class IdeaSourcesAndJavadocJarsIntegrationTest extends AbstractSourcesAndJavadoc
         iml.dependencies.libraries[0].assertHasNoJavadoc()
         iml.dependencies.libraries[0].assertHasNoSource()
     }
-
-
 }

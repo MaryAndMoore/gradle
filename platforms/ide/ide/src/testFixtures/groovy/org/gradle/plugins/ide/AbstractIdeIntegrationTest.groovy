@@ -24,6 +24,7 @@ import org.gradle.plugins.ide.fixtures.IdeaFixtures
 import org.gradle.plugins.ide.fixtures.IdeaModuleFixture
 import org.gradle.plugins.ide.fixtures.IdeaProjectFixture
 import org.gradle.test.fixtures.file.TestFile
+import org.gradle.util.GradleVersion
 import org.junit.Before
 
 abstract class AbstractIdeIntegrationTest extends AbstractIntegrationTest {
@@ -59,6 +60,8 @@ abstract class AbstractIdeIntegrationTest extends AbstractIntegrationTest {
     }
 
     protected ExecutionResult runIdeaTask(buildScript) {
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         return runTask("idea", buildScript)
     }
 

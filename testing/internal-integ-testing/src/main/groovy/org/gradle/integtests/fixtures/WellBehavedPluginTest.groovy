@@ -17,6 +17,7 @@
 package org.gradle.integtests.fixtures
 
 import org.gradle.api.internal.plugins.DefaultPluginManager
+import org.gradle.util.GradleVersion
 import org.gradle.util.internal.GUtil
 import org.junit.Assume
 
@@ -25,6 +26,7 @@ import java.util.regex.Pattern
 abstract class WellBehavedPluginTest extends AbstractIntegrationSpec {
 
     boolean expectTaskProjectDeprecation
+    boolean expectTestSourcesAndResourcesDeprecation
 
     String getPluginName() {
         def matcher = Pattern.compile("(\\w+)Plugin(GoodBehaviour)?(Integ(ration)?)?Test").matcher(getClass().simpleName)
@@ -56,6 +58,7 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationSpec {
 
         expect:
         expectTaskProjectDeprecationIfNeeded()
+        expectTestSourcesAndResourcesDeprecationIfNeeded()
         succeeds mainTask
     }
 
@@ -85,6 +88,7 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationSpec {
 
         expect:
         expectTaskProjectDeprecationIfNeeded()
+        expectTestSourcesAndResourcesDeprecationIfNeeded()
         succeeds mainTask
     }
 
@@ -195,5 +199,16 @@ abstract class WellBehavedPluginTest extends AbstractIntegrationSpec {
             "This will fail with an error in Gradle 10.0. " +
             "This API is incompatible with the configuration cache, which will become the only mode supported by Gradle in a future release. " +
             "Consult the upgrading guide for further information: https://docs.gradle.org/current/userguide/upgrading_version_7.html#task_project")
+    }
+
+    void expectTestSourcesAndResourcesDeprecationIfNeeded() {
+        if (expectTestSourcesAndResourcesDeprecation) {
+            expectTestSourcesAndResourcesDeprecation()
+        }
+    }
+
+    void expectTestSourcesAndResourcesDeprecation() {
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
     }
 }

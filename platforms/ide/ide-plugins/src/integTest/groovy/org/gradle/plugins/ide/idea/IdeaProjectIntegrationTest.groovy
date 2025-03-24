@@ -19,6 +19,7 @@ package org.gradle.plugins.ide.idea
 import org.gradle.integtests.fixtures.ToBeFixedForConfigurationCache
 import org.gradle.integtests.fixtures.TestResources
 import org.gradle.plugins.ide.AbstractIdeIntegrationTest
+import org.gradle.util.GradleVersion
 import org.junit.Rule
 import org.junit.Test
 
@@ -30,7 +31,7 @@ class IdeaProjectIntegrationTest extends AbstractIdeIntegrationTest {
     @ToBeFixedForConfigurationCache
     void "allows configuring the VCS"() {
         //when
-        runTask('idea', '''
+        runIdeaTask('''
 apply plugin: "java"
 apply plugin: "idea"
 
@@ -50,6 +51,8 @@ idea.project {
     void enablesCustomizationsOnNewModel() {
         //when
         createDirs("someProjectThatWillBeExcluded", "api")
+        executer.expectDeprecationWarning("The IdeaModule.testSourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testSources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testSourceDirs in the Gradle documentation.")
+        executer.expectDeprecationWarning("The IdeaModule.testResourceDirs property has been deprecated. This is scheduled to be removed in Gradle 9.0. Please use the testResources property instead. For more information, please refer to https://docs.gradle.org/${GradleVersion.current().version}/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html#org.gradle.plugins.ide.idea.model.IdeaModule:testResourceDirs in the Gradle documentation.")
         def result = runTask ':idea', 'include "someProjectThatWillBeExcluded", "api"', '''
 allprojects {
     apply plugin: "java"
@@ -118,7 +121,7 @@ idea {
 '''
 
         //when
-        runTask 'idea', '''
+        runIdeaTask('''
 apply plugin: "java"
 apply plugin: "idea"
 
@@ -143,7 +146,7 @@ idea {
 ideaProject.doLast {
     assert hooks == ['before', 'when']
 }
-'''
+''')
         //then no exception thrown
     }
 }
